@@ -1,10 +1,13 @@
 import * as http from 'http'; // TS
+import * as fs from 'fs'; 
 
 const server = http.createServer((req, res) => {
     // console.log(req.url, req.method, req.headers);
     // process.exit()
 
     const url = req.url;
+    const method = req.method;
+
     if (url === '/') {
         res.write('<html>');
         res.write('<head><title>Enter message</title></head>');
@@ -12,7 +15,14 @@ const server = http.createServer((req, res) => {
         res.write('</html>');
         return res.end();
     };
-    
+
+    if (url === '/message' && method === 'POST') {
+        fs.writeFileSync('message.txt', 'DUMMY');
+        res.statusCode = 302;
+        res.setHeader('Location', '/');
+        return res.end();
+    };
+
     res.setHeader('Content-Type', 'text/html');
     res.write('<html>');
     res.write('<head><title>My first page</title></head>');
